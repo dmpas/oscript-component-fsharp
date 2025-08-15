@@ -2,9 +2,11 @@
 
 open ScriptEngine.Machine.Contexts
 open ScriptEngine.Machine
+open OneScript.Contexts
+open OneScript.Types
 
 [<ContextClass("МойКласс", "MyClass")>]
-type MyClass(initialValue) = 
+type MyClass(context: TypeActivationContext, initialValue) = 
     inherit AutoContext<MyClass>()
 
     [<ContextProperty("МоеСвойствоДляЧтенияТолько")>]
@@ -18,10 +20,14 @@ type MyClass(initialValue) =
     member this.MyMethod a b = a + b
 
     [<ContextMethod("МойВторойМетод")>]
-    member this.MySecondMethod (a:IValue, b:IValue) = ValueFactory.Add(a, b)
+    member this.MySecondMethod (a:IValue, b:IValue) = ValueFactory.Add(a, b, context.CurrentProcess)
+
+    static member StringHelper(context: TypeActivationContext, data: IValue) = data.AsString(context.CurrentProcess)
 
     [<ScriptConstructor>]
-    static member DefaultConstructor () = MyClass("321") :> IRuntimeContextInstance
+    static member DefaultConstructor (context: TypeActivationContext) = MyClass(context, "321") :> IRuntimeContextInstance
 
     [<ScriptConstructor>]
-    static member ConstructorWithValue (data:IValue) = MyClass(data.AsString()) :> IRuntimeContextInstance
+    static member ConstructorWithValue context data =
+        let dataInput:IValue = data // таков вывод типов в F#
+        MyClass(context, data.AsString(context.CurrentProcess))

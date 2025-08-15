@@ -1,4 +1,4 @@
-ПодключитьВнешнююКомпоненту("OsComponentFSharp/bin/Debug/OsComponentFSharp.dll");
+ПодключитьВнешнююКомпоненту("OsComponentFSharp/bin/Release/net6.0/publish/OsComponentFSharp.dll");
 
 МойОбъект = Новый МойКласс;
 Сообщить(МойОбъект.МоеСвойствоДляЧтенияТолько);
