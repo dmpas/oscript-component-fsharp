@@ -25,12 +25,6 @@ install:
 
     cd ..
 
-- cmd: >-
-
-    appveyor DownloadFile https://github.com/dmpas/OneScriptDocumenter/releases/download/1.0.13/documenter.zip -FileName OneScriptDocumenter.zip
-
-    7z x OneScriptDocumenter.zip > NUL
-    
 build:
   verbosity: minimal
 configuration: Release
@@ -53,8 +47,6 @@ after_build:
     mkdir oslib\Components\dotnet
     
     set PUBLISH=%main_project%\bin\%CONFIGURATION%\net6.0\publish
-    
-    OneScriptDocumenter.exe json oslib\Components\dotnet\syntaxHelp.json %PUBLISH%\1script_%main_project%.dll
     
     del %PUBLISH%\ScriptEngine*.* %PUBLISH%\NewtonSoft*.* %PUBLISH%\DotNetZip*.* %PUBLISH%\OneScript*.*
     
