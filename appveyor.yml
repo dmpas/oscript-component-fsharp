@@ -44,17 +44,21 @@ test_script:
 after_build:
 - cmd: >-
 
-    del %main_project%\bin\%CONFIGURATION%\net6.0\*.pdb
+    dotnet publish --no-build --configuration %CONFIGURATION%
+
+    del %main_project%\bin\%CONFIGURATION%\net6.0\publish\*.pdb
     
     mkdir oslib\Components
 
     mkdir oslib\Components\dotnet
     
-    OneScriptDocumenter.exe json oslib\Components\dotnet\syntaxHelp.json %main_project%\bin\%CONFIGURATION%\net6.0\1script_%main_project%.dll
+    set PUBLISH=%main_project%\bin\%CONFIGURATION%\net6.0\publish
     
-    del %main_project%\bin\%CONFIGURATION%\ScriptEngine*.* %main_project%\bin\%CONFIGURATION%\net6.0\NewtonSoft*.* %main_project%\bin\%CONFIGURATION%\net6.0\DotNetZip*.*
+    OneScriptDocumenter.exe json oslib\Components\dotnet\syntaxHelp.json %PUBLISH%\1script_%main_project%.dll
     
-    xcopy %main_project%\bin\%CONFIGURATION%\net6.0\* oslib\Components\dotnet\
+    del %PUBLISH%\ScriptEngine*.* %PUBLISH%\NewtonSoft*.* %PUBLISH%\DotNetZip*.* %PUBLISH%\OneScript*.*
+    
+    xcopy %PUBLISH%\* oslib\Components\dotnet\
     
     cd oslib
 
