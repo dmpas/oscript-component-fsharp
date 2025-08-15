@@ -38,3 +38,7 @@ Thumbs.db
 
 # dotCover
 *.dotCover
+
+oscript_modules/
+oslib/Components/dotnet/
+*.ospx
