@@ -1,0 +1,67 @@
+version: 2.0.0-{build}
+image: Visual Studio 2022
+environment:
+  main_project: OsComponentFSharp
+before_build:
+- ps: nuget restore
+init:
+- REG ADD "HKLM\Software\Microsoft\Command Processor" /v Autorun /t REG_SZ /d "chcp 65001>nul" /f
+- ps: Set-WinSystemLocale ru-RU
+- ps: Start-Sleep -s 15
+- ps: Restart-Computer
+install:
+- cmd: >-
+    mkdir os2
+
+    cd os2
+
+    appveyor DownloadFile https://oscript.io/downloads/preview/OneScript-2.0.0-rc.8-fdd-x64.zip -FileName fdd.zip
+
+    7z x fdd.zip > NUL
+    
+    bin\oscript.bat -version
+
+    bin\oscript.bat lib\opm\src\cmd\opm.os install opm
+
+    cd ..
+
+build:
+  verbosity: minimal
+configuration: Release
+test_script:
+- cmd: nunit3-console NUnitTests\bin\%CONFIGURATION%\net6.0\NUnitTests.dll --result=myresults.xml;format=AppVeyor
+- cmd: >-
+    set OSLIB_LOADER_TRACE=1
+    
+    os2\bin\oscript.bat testcomponent.os
+
+after_build:
+- cmd: >-
+
+    dotnet publish --no-build --configuration %CONFIGURATION%
+
+    del %main_project%\bin\%CONFIGURATION%\net6.0\publish\*.pdb
+    
+    mkdir oslib\Components
+
+    mkdir oslib\Components\dotnet
+    
+    set PUBLISH=%main_project%\bin\%CONFIGURATION%\net6.0\publish
+    
+    del %PUBLISH%\ScriptEngine*.* %PUBLISH%\NewtonSoft*.* %PUBLISH%\DotNetZip*.* %PUBLISH%\OneScript*.*
+    
+    xcopy %PUBLISH%\* oslib\Components\dotnet\
+    
+    cd oslib
+
+    ..\os2\bin\oscript.bat ..\os2\lib\opm\src\cmd\opm.os build .
+    
+    for %%X in (*.ospx) do (..\os2\bin\oscript.bat ..\os2\lib\opm\src\cmd\opm.os install -f %%X )
+    
+    cd ..
+
+artifacts:
+- path: oslib\*.ospx
+  name: OsComponentFSharp
+- path: oslib\Components\dotnet\1script_*.dll
+  name: components

@@ -1,0 +1,12 @@
+Описание
+	.Имя("component-example-fsharp")
+	.Версия("2.0.0")
+	.Автор("Sergey Batanov")
+	.АдресАвтора("sergey.batanov@dmpas.ru")
+	.Описание("Пример компоненты")
+	//.ВерсияСреды("2.0.0")
+	.ВключитьФайл("Components")
+	.ВключитьФайл("package-loader.os")
+;
+
+// vim: filetype=onescript
