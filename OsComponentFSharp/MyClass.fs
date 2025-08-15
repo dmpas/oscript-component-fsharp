@@ -28,9 +28,11 @@ type MyClass(context: TypeActivationContext, initialValue) =
 
     static member StringHelper(context: TypeActivationContext, data: IValue) = data.AsString(context.CurrentProcess)
 
+    /// Конструтор по-умолчанию
     [<ScriptConstructor>]
     static member DefaultConstructor (context: TypeActivationContext) = MyClass(context, "321") :> IRuntimeContextInstance
 
+    /// Конструктор со значением по-умолчнию
     [<ScriptConstructor>]
     static member ConstructorWithValue context data =
         let dataInput:IValue = data // таков вывод типов в F#

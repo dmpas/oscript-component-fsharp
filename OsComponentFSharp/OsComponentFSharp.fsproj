@@ -8,6 +8,7 @@
         <FileVersion>2.0.0</FileVersion>
         <Company>OsComponentFSharp</Company>
         <AssemblyName>1script_OsComponentFSharp</AssemblyName>
+		<GenerateDocumentationFile>true</GenerateDocumentationFile>
     </PropertyGroup>
 
     <ItemGroup>
