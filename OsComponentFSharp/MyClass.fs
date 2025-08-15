@@ -5,13 +5,16 @@ open ScriptEngine.Machine
 open OneScript.Contexts
 open OneScript.Types
 
+/// Демонстрационный класс
 [<ContextClass("МойКласс", "MyClass")>]
 type MyClass(context: TypeActivationContext, initialValue) = 
     inherit AutoContext<MyClass>()
 
+    /// Свойство, только для чтения
     [<ContextProperty("МоеСвойствоДляЧтенияТолько")>]
     member val MyReadOnlyProperty = initialValue
 
+    /// Обычное свойство
     [<ContextProperty("МоеСвойство")>]
     member val MyProperty = "" with get,set
 
@@ -19,6 +22,7 @@ type MyClass(context: TypeActivationContext, initialValue) =
     [<ContextMethod("МойМетод")>]
     member this.MyMethod a b = a + b
 
+    /// Метод складывания
     [<ContextMethod("МойВторойМетод")>]
     member this.MySecondMethod (a:IValue, b:IValue) = ValueFactory.Add(a, b, context.CurrentProcess)
 

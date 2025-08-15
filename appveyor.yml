@@ -71,5 +71,5 @@ after_build:
 artifacts:
 - path: oslib\*.ospx
   name: OsComponentFSharp
-- path: oslib\Components\dotnet\*.dll
+- path: oslib\Components\dotnet\1script_*.dll
   name: components
